@@ -2,7 +2,7 @@ const Node = require('./Node');
 
 class Tree {
   constructor(array) {
-    const sorted = [...array].sort((a, b) => a - b);
+    const sorted = [...new Set(array)].sort((a, b) => a - b);
     this.root = this.buildTree(sorted);
   }
 
@@ -17,15 +17,35 @@ class Tree {
     return root;
   }
 
-  insert(value, root = this.root) {
-    let node = root;
-    if (node === null) {
-      node = new Node(value);
-      return this.root;
+  static minValue(root) {
+    let minv = root.key;
+    while (root.left != null) {
+      minv = root.left.key;
+      root = root.left;
     }
-    return node.key < value
-      ? this.insert(value, node.right)
-      : this.insert(value, node.left);
+    return minv;
+  }
+
+  insert(value, root = this.root) {
+    if (root === null) return new Node(value);
+    if (root.key === value) return;
+    root.key < value
+      ? (root.right = this.insert(value, root.right))
+      : (root.left = this.insert(value, root.left));
+    return root;
+  }
+
+  delete(value, root = this.root) {
+    if (root === null) return root;
+    if (root.key < value) root.right = this.delete(value, root.right);
+    else if (root.key > value) root.left = this.delete(value, root.left);
+    else {
+      if (root.left === null) return root.right;
+      else if (root.right === null) return root.left;
+      root.key = this.minValue(root.right);
+      root.right = this.delete(value, root.right);
+    }
+    return root;
   }
 
   /**
@@ -48,3 +68,4 @@ let tree = new Tree([1, 2, 4, 3, 5, 6, 7]);
 console.log(tree.find(6));
 console.log(tree.insert(8));
 console.log(tree.find(8));
+console.log(tree.delete(3));
