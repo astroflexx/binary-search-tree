@@ -81,6 +81,50 @@ class Tree {
     }
     if (!callback) return results;
   }
+
+  // 3 methods for depth-first traversal
+  // root left right
+  preorder(callback) {
+    const stack = [this.root];
+    const results = [];
+    while (stack.length) {
+      const node = stack.pop();
+      if (node.right) stack.push(node.right);
+      if (node.left) stack.push(node.left);
+      if (callback) callback(node);
+      results.push(node.key);
+    }
+    if (!callback) return results;
+  }
+
+  // left root right
+  inorder(callback) {
+    const stack = [this.root];
+    const results = [];
+    while (stack.length) {
+      const node = stack.pop();
+      if (node.left) stack.push(node.left);
+      if (node.right) stack.push(node.right);
+
+      if (callback) callback(node);
+      results.push(node.key);
+    }
+    if (!callback) return results;
+  }
+
+  // left right root
+  postorder(callback) {
+    const stack = [this.root];
+    const results = [];
+    while (stack.length) {
+      const node = stack.pop();
+      if (node.right) stack.push(node.left);
+      if (node.left) stack.push(node.right);
+      if (callback) callback(node);
+      results.push(node.key);
+    }
+    if (!callback) return results.reverse();
+  }
 }
 
 let tree = new Tree([1, 2, 4, 3, 5, 6, 7]);
