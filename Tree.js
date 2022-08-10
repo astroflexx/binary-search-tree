@@ -62,10 +62,34 @@ class Tree {
     }
     return node;
   }
+
+  // Breadth First Traversal (level by level)
+  levelOrder(callback) {
+    const queue = [this.root];
+    const results = [];
+    while (queue.length) {
+      let level = [];
+      let size = queue.length;
+      for (let i = 0; i < size; i++) {
+        const node = queue.shift();
+        level.push(node.key);
+        if (node.left) queue.push(node.left);
+        if (node.right) queue.push(node.right);
+        if (callback) callback(node);
+      }
+      results.push(level);
+    }
+    if (!callback) return results;
+  }
 }
 
 let tree = new Tree([1, 2, 4, 3, 5, 6, 7]);
-console.log(tree.find(6));
-console.log(tree.insert(8));
-console.log(tree.find(8));
-console.log(tree.delete(3));
+//console.log(tree.find(6));
+//console.log(tree.insert(8));
+//console.log(tree.find(8));
+//console.log(tree.delete(3));
+console.log(tree);
+console.log(tree.levelOrder());
+console.log(tree.preorder());
+console.log(tree.inorder());
+console.log(tree.postorder());
