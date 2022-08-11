@@ -133,6 +133,15 @@ class Tree {
     const rightHeight = this.height(node.right);
     return Math.max(leftHeight, rightHeight) + 1;
   }
+
+  depth(node, root = this.root, level = 0) {
+    if (!node) return null;
+    if (root === null) return 0;
+    if (root.key === node.key) return level;
+    let ans = this.depth(node, root.left, level + 1);
+    if (ans !== 0) return ans;
+    return this.depth(node, root.right, level + 1);
+  }
 }
 
 let tree = new Tree([1, 2, 4, 3, 5, 6, 7]);
@@ -145,5 +154,5 @@ console.log(tree.preorder());
 console.log(tree.inorder());
 console.log(tree.postorder());
 console.log(tree.height(tree.find(5)));
-// console.log(tree.depth(tree.find(6)));
+console.log(tree.depth(tree.find(6)));
 // console.log(tree.isBalanced());
