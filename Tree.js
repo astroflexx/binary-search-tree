@@ -33,7 +33,6 @@ class Tree {
 
   insert(value, root = this.root) {
     if (root === null) return new Node(value);
-    if (root.key === value) return;
     root.key < value
       ? (root.right = this.insert(value, root.right))
       : (root.left = this.insert(value, root.left));
@@ -152,18 +151,18 @@ class Tree {
     return this.depth(node, root.right, level + 1);
   }
 
-  isBalanced(root = this.root) {
-    const checkHeight = (node) => {
-      if (node === null) return 0;
-      const left = checkHeight(node?.left);
-      const right = checkHeight(node?.left);
-      if (left === false || right === false || Math.abs(left - right) > 1)
-        return false;
-      return Math.max(left, right) + 1;
-    };
+  isBalanced(node = this.root) {
+    if (node === null) return true;
+    const left = this.isBalanced(node.left);
+    const right = this.isBalanced(node.right);
+    const leftNode = this.height(node.left);
+    const rightNode = this.height(node.right);
 
-    if (root === null) return true;
-    return checkHeight(root) !== false;
+    if (Math.abs(leftNode - rightNode) > 1) {
+      return false;
+    }
+
+    return left && right;
   }
 
   rebalance() {
@@ -177,15 +176,12 @@ module.exports = Tree;
 
 // TESTS
 let tree = new Tree([1, 3, 2, 4]);
-console.log(tree.find(6)); //null
-console.log(tree.insert(5));
-console.log(tree.find(5));
-console.log(tree);
-console.log(tree.levelOrder()); //[ [ 3 ], [ 2, 4 ], [ 1, 5 ] ]
-console.log(tree.preorder()); // [ 3, 2, 1, 4, 5 ]
-console.log(tree.inorder()); //[ 1, 2, 3, 4, 5 ]
-console.log(tree.postorder()); //[ 1, 2, 5, 4, 3 ]
-console.log(tree.height(tree.find(5))); // 1
-console.log(tree.depth(tree.find(6))); // null
-console.log(tree.isBalanced()); // true;
-console.log(tree.rebalance());
+tree.insert(8);
+tree.insert(10);
+console.log(tree.levelOrder()); // [ [ 3 ], [ 2, 4 ], [ 1, 8 ], [ 10 ] ]
+console.log(tree.preorder()); // [ 3, 2, 1, 4, 8, 10 ]
+console.log(tree.inorder()); // [ 1, 2, 3, 4, 8, 10 ]
+console.log(tree.postorder()); // [ 1, 2, 10, 8, 4, 3 ]
+console.log(tree.isBalanced()); // false
+tree.rebalance();
+console.log(tree.isBalanced()); //true;
