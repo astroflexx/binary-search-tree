@@ -64,6 +64,7 @@ class Tree {
   }
 
   // Breadth First Traversal (level by level)
+  // use Queue : First In, First Out
   levelOrder(callback) {
     const queue = [this.root];
     const results = [];
@@ -82,7 +83,13 @@ class Tree {
     if (!callback) return results;
   }
 
-  // 3 methods for depth-first traversal
+  /**
+   * 3 methods for depth-first traversal
+   * Stack: Last In, First Out
+   * Preorder and Postorder uses stack.
+   * Inorder uses iteration.
+   */
+
   // root left right
   preorder(callback) {
     const stack = [this.root];
@@ -98,18 +105,12 @@ class Tree {
   }
 
   // left root right
-  inorder(callback) {
-    const stack = [this.root];
-    const results = [];
-    while (stack.length) {
-      const node = stack.pop();
-      if (node.left) stack.push(node.left);
-      if (node.right) stack.push(node.right);
-
-      if (callback) callback(node);
-      results.push(node.key);
-    }
-    if (!callback) return results;
+  inorder(node = this.root, callback, result = []) {
+    if (node === null) return;
+    this.inorder(node.left, callback, result);
+    callback ? callback(node) : result.push(node.key);
+    this.inorder(node.right, callback, result);
+    if (result) return result;
   }
 
   // left right root
@@ -118,12 +119,19 @@ class Tree {
     const results = [];
     while (stack.length) {
       const node = stack.pop();
-      if (node.right) stack.push(node.left);
-      if (node.left) stack.push(node.right);
+      if (node.left) stack.push(node.left);
+      if (node.right) stack.push(node.right);
       if (callback) callback(node);
       results.push(node.key);
     }
     if (!callback) return results.reverse();
+  }
+
+  height(node = this.root) {
+    if (node === null) return 0;
+    const leftHeight = this.height(node.left);
+    const rightHeight = this.height(node.right);
+    return Math.max(leftHeight, rightHeight) + 1;
   }
 }
 
@@ -131,9 +139,11 @@ let tree = new Tree([1, 2, 4, 3, 5, 6, 7]);
 //console.log(tree.find(6));
 //console.log(tree.insert(8));
 //console.log(tree.find(8));
-//console.log(tree.delete(3));
 console.log(tree);
 console.log(tree.levelOrder());
 console.log(tree.preorder());
 console.log(tree.inorder());
 console.log(tree.postorder());
+console.log(tree.height(tree.find(5)));
+// console.log(tree.depth(tree.find(6)));
+// console.log(tree.isBalanced());
