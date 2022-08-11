@@ -11,7 +11,9 @@ console.log('Preorder =>', tree.preorder());
 console.log('Inorder =>', tree.inorder());
 console.log('Postorder =>', tree.postorder());
 
-tree.insert(Math.floor(Math.random() * 20));
+for (let i = 0; i < 5; i++) {
+  tree.insert(Math.floor(Math.random() * 20));
+}
 console.log('Balanced:', tree.isBalanced());
 
 tree.rebalance();
