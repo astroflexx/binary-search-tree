@@ -153,16 +153,14 @@ class Tree {
 
   isBalanced(node = this.root) {
     if (node === null) return true;
-    const left = this.isBalanced(node.left);
-    const right = this.isBalanced(node.right);
-    const leftNode = this.height(node.left);
-    const rightNode = this.height(node.right);
-
-    if (Math.abs(leftNode - rightNode) > 1) {
-      return false;
-    }
-
-    return left && right;
+    const heightDiff = Math.abs(
+      this.height(node.left) - this.height(node.right)
+    );
+    return (
+      heightDiff <= 1 &&
+      this.isBalanced(node.left) &&
+      this.isBalanced(node.right)
+    );
   }
 
   rebalance() {
@@ -178,6 +176,12 @@ module.exports = Tree;
 let tree = new Tree([1, 3, 2, 4]);
 tree.insert(8);
 tree.insert(10);
+tree.insert(9);
+tree.delete(9);
+console.log(tree.find(9)); // null. deleted
+console.log(tree.height()); // root height = 4
+console.log(tree.height(tree.find(10))); // height = 1
+console.log(tree.depth(tree.find(1))); // depth = 2
 console.log(tree.levelOrder()); // [ [ 3 ], [ 2, 4 ], [ 1, 8 ], [ 10 ] ]
 console.log(tree.preorder()); // [ 3, 2, 1, 4, 8, 10 ]
 console.log(tree.inorder()); // [ 1, 2, 3, 4, 8, 10 ]
