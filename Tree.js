@@ -155,8 +155,8 @@ class Tree {
   isBalanced(root = this.root) {
     const checkHeight = (node) => {
       if (node === null) return 0;
-      const left = checkHeight(node.left);
-      const right = checkHeight(node.left);
+      const left = checkHeight(node?.left);
+      const right = checkHeight(node?.left);
       if (left === false || right === false || Math.abs(left - right) > 1)
         return false;
       return Math.max(left, right) + 1;
@@ -172,6 +172,8 @@ class Tree {
     this.root = this.buildTree(sorted);
   }
 }
+
+module.exports = Tree;
 
 // TESTS
 let tree = new Tree([1, 3, 2, 4]);
