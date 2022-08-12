@@ -135,13 +135,21 @@ class Tree {
     if (!callback) return results.reverse();
   }
 
+  /**
+   * Height is defined as the number of edges in longest path from a given node to a leaf node.
+   * Height of a leaf node is 0
+   */
   height(node = this.root) {
-    if (node === null) return 0;
+    if (node === null) return -1;
     const leftHeight = this.height(node.left);
     const rightHeight = this.height(node.right);
     return Math.max(leftHeight, rightHeight) + 1;
   }
 
+  /**
+   * Depth of a node is the number of edges from the node to the tree's root node.
+   * Depth of root node is 0
+   */
   depth(node, root = this.root, level = 0) {
     if (!node) return null;
     if (root === null) return 0;
@@ -176,16 +184,17 @@ module.exports = Tree;
 let tree = new Tree([1, 3, 2, 4]);
 tree.insert(8);
 tree.insert(10);
+tree.insert(11);
 tree.insert(9);
 tree.delete(9);
 console.log(tree.find(9)); // null. deleted
 console.log(tree.height()); // root height = 4
 console.log(tree.height(tree.find(10))); // height = 1
-console.log(tree.depth(tree.find(1))); // depth = 2
-console.log(tree.levelOrder()); // [ [ 3 ], [ 2, 4 ], [ 1, 8 ], [ 10 ] ]
-console.log(tree.preorder()); // [ 3, 2, 1, 4, 8, 10 ]
-console.log(tree.inorder()); // [ 1, 2, 3, 4, 8, 10 ]
-console.log(tree.postorder()); // [ 1, 2, 10, 8, 4, 3 ]
+console.log(tree.depth(tree.find(11))); // depth = 4
+console.log(tree.levelOrder()); // [ [ 3 ], [ 2, 4 ], [ 1, 8 ], [ 10 ], [11] ]
+console.log(tree.preorder()); // [ 3, 2, 1, 4, 8, 10, 11 ]
+console.log(tree.inorder()); // [ 1, 2, 3, 4, 8, 10, 11 ]
+console.log(tree.postorder()); // [ 1, 2, 11, 10, 8, 4, 3 ]
 console.log(tree.isBalanced()); // false
 tree.rebalance();
 console.log(tree.isBalanced()); //true;
