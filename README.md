@@ -1,3 +1,1 @@
-# Computer Science: Data Structure and Algorithms
-
-Solution to the assignments in TOP's JS Path: Binary Search Tree
+I'm forking this coz I've implemented this already in C and its so boring to do it all over again.
